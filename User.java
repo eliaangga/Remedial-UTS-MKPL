@@ -40,19 +40,15 @@ public class User {
         return PasswordValidator.isStrongPassword(password);
     }
 
-    public void updateProfile(String firstName, String lastName, Gender gender, String studentIdentifierNumber,
-                              String programStudy, String faculty, int enrollmentYear, String email,
-                              String password, String userName) throws Exception {
-
-        setSchoolIdentifier(programStudy, faculty, enrollmentYear);
-        setSchoolAccount(email, password, userName);
-        setGeneralInformation(firstName, lastName, gender, studentIdentifierNumber);
+    public void updateProfile(Profile profile) throws Exception {
+        setSchoolIdentifier(profile.getProgramStudy(), profile.getFaculty(), profile.getEnrollmentYear());
+        setSchoolAccount(profile.getEmail(), profile.getPassword(), profile.getUserName());
+        setGeneralInformation(profile.getFirstName(), profile.getLastName(), profile.getGender(), profile.getStudentIdentifierNumber());
 
         int calculatedYear = calculateEnrollmentYear();
 
-        String emailStatus = EmailValidator.getEmailStatus(email);
-        String passwordStatus = PasswordValidator.getPasswordStatus(password);
-
+        String emailStatus = EmailValidator.getEmailStatus(profile.getEmail());
+        String passwordStatus = PasswordValidator.getPasswordStatus(profile.getPassword());
 
         Printer.printStatus(emailStatus, passwordStatus);
     }
