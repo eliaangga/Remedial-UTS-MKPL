@@ -70,28 +70,32 @@ public class User {
     }
 
     // This method is setting up the user's general information
+<<<<<<< Updated upstream
     public void setGeneralInformation(String firstName, String lastName, String gender, String studentIdentifierNumber) throws Exception {
+=======
+    public void setGeneralInformation(GeneralInformation generalInformation) throws Exception {
+>>>>>>> Stashed changes
         // Check if the inputs are empty or blank
-        if (firstName == null || firstName.trim().isEmpty()) {
+        if (generalInformation.getFirstName() == null || generalInformation.getFirstName().trim().isEmpty()) {
             throw new Exception("First name should not be null, empty, or blank.");
         }
-        if (lastName == null || lastName.trim().isEmpty()) {
+        if (generalInformation.getLastName() == null || generalInformation.getLastName().trim().isEmpty()) {
             throw new Exception("Last name should not be null, empty, or blank.");
         }
 
-        if (gender == null || gender.trim().isEmpty()) {
-            throw new Exception("Gender should not be null, empty, or blank.");
+        if (generalInformation.getGender() == null) {
+            throw new Exception("Gender should not be null.");
         }
 
-        if (studentIdentifierNumber == null || studentIdentifierNumber.trim().isEmpty()) {
+        if (generalInformation.getStudentIdentifierNumber() == null || generalInformation.getStudentIdentifierNumber().trim().isEmpty()) {
             throw new Exception("Student identifier number should not be null, empty, or blank.");
         }
 
         // Set the instance variables
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.studentIdentifierNumber = studentIdentifierNumber;
+        this.firstName = generalInformation.getFirstName();
+        this.lastName = generalInformation.getLastName();
+        this.gender = generalInformation.getGender();
+        this.studentIdentifierNumber = generalInformation.getStudentIdentifierNumber();
     }
 
     // This method is used to calculate the year of the user based on the enrollment year
@@ -128,40 +132,38 @@ public class User {
     public void updateProfile(String firstName, String lastName, String gender, String studentIdentifierNumber,
                               String programStudy, String faculty, int enrollmentYear, String email,
                               String password, String userName) throws Exception {
+        validateStudentIdentifierNumber(studentIdentifierNumber);
+        validateEmailAndPassword(email, password);
 
-        if(studentIdentifierNumber.length() != 10 || !StringUtils.isNumeric(studentIdentifierNumber)){
+        setSchoolIdentifier(programStudy, faculty, enrollmentYear);
+        setSchoolAccount(email, password, userName);
+        setGeneralInformation(firstName, lastName, gender, studentIdentifierNumber);
+
+        int calculateYear = calculateEnrollmentYear();
+
+        printUpdateStatus();
+    }
+
+    private void validateStudentIdentifierNumber(String studentIdentifierNumber) throws Exception {
+        if (studentIdentifierNumber.length() != 10 || !StringUtils.isNumeric(studentIdentifierNumber)) {
             throw new Exception("Input is not valid.");
         }
+    }
 
+    private void validateEmailAndPassword(String email, String password) throws Exception {
         boolean isValidEmail = isValidEmail(email);
         boolean isStrongPassword = isStrongPassword(password);
 
-        this.setSchoolIdentifier(programStudy, faculty, enrollmentYear);
-        this.setSchoolAccount(email, password, userName);
-        this.setGeneralInformation(firstName, lastName, gender, studentIdentifierNumber);
-        int calculateYear = this.calculateEnrollmentYear();
-
-        String emailStatus = "", passwordStatus = "";
-
-        if(isValidEmail){
-            emailStatus = "VALID";
-        }else{
-            emailStatus = "INVALID";
+        if (!isValidEmail && !isStrongPassword) {
+            throw new Exception("THIS IS JOKE RIGHT? PLEASE USE VALID EMAIL AND STRONG PASSWORD");
+        } else if (!isValidEmail) {
+            throw new Exception("PLEASE CHECK YOUR EMAIL");
+        } else if (!isStrongPassword) {
+            throw new Exception("PLEASE USE BETTER PASSWORD");
         }
-        if(isStrongPassword){
-            passwordStatus = "STRONG";
-        }else{
-            passwordStatus = "WEAK";
-        }
+    }
 
-        if(emailStatus.equals("VALID") && passwordStatus.equals("STRONG")){
-            System.out.println("UPDATE COMPLETE!");
-        }else if(emailStatus.equals("VALID") && passwordStatus.equals("WEAK")){
-            System.out.println("PLEASE USE BETTER PASSWORD");
-        }else if(emailStatus.equals("INVALID") && passwordStatus.equals("STRONG")){
-            System.out.println("PLEASE CHECK YOUR EMAIL");
-        }else if(emailStatus.equals("INVALID") && passwordStatus.equals("WEAK")){
-            System.out.println("THIS IS JOKE RIGHT? PLEASE USE VALID EMAIL AND STRONG PASSWORD");
-        }
+    private void printUpdateStatus() {
+        System.out.println("UPDATE COMPLETE!");
     }
 }
