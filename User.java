@@ -49,12 +49,9 @@ public class User {
         int calculatedYear = calculateEnrollmentYear();
         String emailStatus = EmailValidator.getEmailStatus(profile.getSchoolAccount().getEmail());
         String passwordStatus = PasswordValidator.getPasswordStatus(profile.getSchoolAccount().getPassword());
-        Printer.printStatus(emailStatus, passwordStatus);
-    }
+        String emailStatus = EmailValidator.getEmailStatus(profile.getSchoolAccount().getEmail());
+        String passwordStatus = PasswordValidator.getPasswordStatus(profile.getSchoolAccount().getPassword());
 
-    public enum Gender {
-        MALE,
-        FEMALE,
-        OTHER
+        Printer.printStatus(emailStatus, passwordStatus);
     }
 }
