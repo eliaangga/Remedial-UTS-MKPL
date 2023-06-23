@@ -42,10 +42,10 @@ public class User {
         setSchoolIdentifier(profile.getSchoolIdentifier());
         setSchoolAccount(profile.getSchoolAccount());
         setGeneralInformation(profile.getGeneralInformation());
-        printProfileStatus();
+        printProfileStatus(profile);
     }
 
-    private void printProfileStatus() {
+    private void printProfileStatus(Profile profile) {
         int calculatedYear = calculateEnrollmentYear();
         String emailStatus = EmailValidator.getEmailStatus(profile.getSchoolAccount().getEmail());
         String passwordStatus = PasswordValidator.getPasswordStatus(profile.getSchoolAccount().getPassword());
