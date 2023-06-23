@@ -33,19 +33,17 @@ public class User {
     }
 
     public boolean isValidEmail(String email) {
-        // Pindahkan logika validasi email ke kelas terpisah EmailValidator
         return EmailValidator.isValidEmail(email);
     }
 
     public boolean isStrongPassword(String password) {
-        // Pindahkan logika validasi kekuatan password ke kelas terpisah PasswordValidator
         return PasswordValidator.isStrongPassword(password);
     }
 
     public void updateProfile(String firstName, String lastName, Gender gender, String studentIdentifierNumber,
                               String programStudy, String faculty, int enrollmentYear, String email,
                               String password, String userName) throws Exception {
-        // Gunakan kelas yang diekstrak untuk menangani tanggung jawab spesifik
+
         setSchoolIdentifier(programStudy, faculty, enrollmentYear);
         setSchoolAccount(email, password, userName);
         setGeneralInformation(firstName, lastName, gender, studentIdentifierNumber);
@@ -55,7 +53,7 @@ public class User {
         String emailStatus = EmailValidator.getEmailStatus(email);
         String passwordStatus = PasswordValidator.getPasswordStatus(password);
 
-        // Pindahkan logika pencetakan ke kelas Printer terpisah atau gunakan kerangka logging
+
         Printer.printStatus(emailStatus, passwordStatus);
     }
 
