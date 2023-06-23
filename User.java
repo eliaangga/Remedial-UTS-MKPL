@@ -1,80 +1,29 @@
 package org.telkom.university.code.smell;
 
-import org.apache.commons.lang3.StringUtils;
 import java.time.Year;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
-// Signature: DHF
 public class User {
-    // This is user's ID index
     private final String userID;
-    // This is user's school identifier
-    private String programStudy;
-    private String faculty;
-    private int enrollmentYear;
+    private SchoolIdentifier schoolIdentifier;
+    private SchoolAccount schoolAccount;
+    private GeneralInformation generalInformation;
 
-    // This is user's account
-    private String email;
-    private String password;
-    private String userName;
-
-    // This is user's general information
-    private String gender;
-    private String firstName;
-    private String lastName;
-    private String studentIdentifierNumber;
-
-    // This is class's constructor
     public User() {
-        // This is initiate the unique ID
         this.userID = UUID.randomUUID().toString();
     }
 
-    // This method is setting up the user's school identifier
-    public void setSchoolIdentifier(String programStudy, String faculty, int enrollmentYear) throws Exception {
-        // Check if the inputs are empty or blank
-        if (programStudy == null || programStudy.trim().isEmpty()) {
-            throw new Exception("Program study should not be null, empty, or blank.");
-        }
-        if (faculty == null || faculty.trim().isEmpty()) {
-            throw new Exception("Faculty should not be null, empty, or blank.");
-        }
-        if (enrollmentYear <= 0 || enrollmentYear >= Integer.MAX_VALUE) {
-            throw new Exception("Enrollment year should be a positive integer.");
-        }
-
-        // Set the instance variables
-        this.programStudy = programStudy;
-        this.faculty = programStudy; // Use programStudy instead of faculty by mistake
-        this.enrollmentYear = enrollmentYear;
+    public void setSchoolIdentifier(SchoolIdentifier schoolIdentifier) {
+        this.schoolIdentifier = schoolIdentifier;
     }
 
-    // This method is setting up the user's school account
-    public void setSchoolAccount(String email, String password, String userName) throws Exception {
-        // Check if the inputs are empty or blank
-        if (email == null || email.trim().isEmpty()) {
-            throw new Exception("Email should not be null, empty, or blank.");
-        }
-        if (password == null || password.trim().isEmpty()) {
-            throw new Exception("Password should not be null, empty, or blank.");
-        }
-        if (userName == null || userName.trim().isEmpty()) {
-            throw new Exception("User name should not be null, empty, or blank.");
-        }
-
-        // Set the instance variables
-        this.email = email;
-        this.password = password;
-        this.userName = userName;
+    public void setSchoolAccount(SchoolAccount schoolAccount) {
+        this.schoolAccount = schoolAccount;
     }
 
-    // This method is setting up the user's general information
-<<<<<<< Updated upstream
+
     public void setGeneralInformation(String firstName, String lastName, String gender, String studentIdentifierNumber) throws Exception {
-=======
     public void setGeneralInformation(GeneralInformation generalInformation) throws Exception {
->>>>>>> Stashed changes
         // Check if the inputs are empty or blank
         if (generalInformation.getFirstName() == null || generalInformation.getFirstName().trim().isEmpty()) {
             throw new Exception("First name should not be null, empty, or blank.");
@@ -91,44 +40,28 @@ public class User {
             throw new Exception("Student identifier number should not be null, empty, or blank.");
         }
 
-        // Set the instance variables
         this.firstName = generalInformation.getFirstName();
         this.lastName = generalInformation.getLastName();
         this.gender = generalInformation.getGender();
         this.studentIdentifierNumber = generalInformation.getStudentIdentifierNumber();
+
+    public void setGeneralInformation(GeneralInformation generalInformation) {
+        this.generalInformation = generalInformation;
     }
 
-    // This method is used to calculate the year of the user based on the enrollment year
     public int calculateEnrollmentYear() {
-        // This is the user's age calculation
-        int currentYears = Year.now().getValue();
-        return currentYears - this.enrollmentYear;
+        int currentYear = Year.now().getValue();
+        return currentYear - schoolIdentifier.getEnrollmentYear();
     }
 
-    // This method is used to validate user's email address
     public boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-                "[a-zA-Z0-9_+&*-]+)*@" +
-                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                "A-Z]{2,7}$";
-
-        Pattern pat = Pattern.compile(emailRegex);
-        if (email == null)
-            return false;
-        return pat.matcher(email).matches();
+        return EmailValidator.isValidEmail(email);
     }
 
-    // This method is used to check if the user's password is strong enough
     public boolean isStrongPassword(String password) {
-        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
-
-        Pattern pat = Pattern.compile(passwordRegex);
-        if (password == null)
-            return false;
-        return pat.matcher(password).matches();
+        return PasswordValidator.isStrongPassword(password);
     }
 
-    // This method is used to update user's profile
     public void updateProfile(String firstName, String lastName, String gender, String studentIdentifierNumber,
                               String programStudy, String faculty, int enrollmentYear, String email,
                               String password, String userName) throws Exception {
@@ -165,5 +98,21 @@ public class User {
 
     private void printUpdateStatus() {
         System.out.println("UPDATE COMPLETE!");
+      
+    public void updateProfile(Profile profile) {
+        setSchoolIdentifier(profile.getSchoolIdentifier());
+        setSchoolAccount(profile.getSchoolAccount());
+        setGeneralInformation(profile.getGeneralInformation());
+        printProfileStatus(profile);
+    }
+
+    private void printProfileStatus(Profile profile) {
+        int calculatedYear = calculateEnrollmentYear();
+        String emailStatus = EmailValidator.getEmailStatus(profile.getSchoolAccount().getEmail());
+        String passwordStatus = PasswordValidator.getPasswordStatus(profile.getSchoolAccount().getPassword());
+        String emailStatus = EmailValidator.getEmailStatus(profile.getSchoolAccount().getEmail());
+        String passwordStatus = PasswordValidator.getPasswordStatus(profile.getSchoolAccount().getPassword());
+
+        Printer.printStatus(emailStatus, passwordStatus);
     }
 }
