@@ -20,7 +20,7 @@ public class User {
     private String userName;
 
     // This is user's general information
-    private String gender;
+    private Gender gender;
     private String firstName;
     private String lastName;
     private String studentIdentifierNumber;
@@ -70,7 +70,7 @@ public class User {
     }
 
     // This method is setting up the user's general information
-    public void setGeneralInformation(String firstName, String lastName, String gender, String studentIdentifierNumber) throws Exception {
+    public void setGeneralInformation(String firstName, String lastName, Gender gender, String studentIdentifierNumber) throws Exception {
         // Check if the inputs are empty or blank
         if (firstName == null || firstName.trim().isEmpty()) {
             throw new Exception("First name should not be null, empty, or blank.");
@@ -125,7 +125,7 @@ public class User {
     }
 
     // This method is used to update user's profile
-    public void updateProfile(String firstName, String lastName, String gender, String studentIdentifierNumber,
+    public void updateProfile(String firstName, String lastName, Gender gender, String studentIdentifierNumber,
                               String programStudy, String faculty, int enrollmentYear, String email,
                               String password, String userName) throws Exception {
 
@@ -163,5 +163,11 @@ public class User {
         }else if(emailStatus.equals("INVALID") && passwordStatus.equals("WEAK")){
             System.out.println("THIS IS JOKE RIGHT? PLEASE USE VALID EMAIL AND STRONG PASSWORD");
         }
+    }
+
+    public enum Gender {
+        MALE,
+        FEMALE,
+        OTHER
     }
 }
