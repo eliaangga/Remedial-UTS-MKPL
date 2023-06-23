@@ -1,9 +1,7 @@
 package org.telkom.university.code.smell;
 
-import org.apache.commons.lang3.StringUtils;
 import java.time.Year;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 public class User {
     private final String userID;
@@ -15,16 +13,16 @@ public class User {
         this.userID = UUID.randomUUID().toString();
     }
 
-    public void setSchoolIdentifier(String programStudy, String faculty, int enrollmentYear) throws Exception {
-        schoolIdentifier = new SchoolIdentifier(programStudy, faculty, enrollmentYear);
+    public void setSchoolIdentifier(SchoolIdentifier schoolIdentifier) {
+        this.schoolIdentifier = schoolIdentifier;
     }
 
-    public void setSchoolAccount(String email, String password, String userName) throws Exception {
-        schoolAccount = new SchoolAccount(email, password, userName);
+    public void setSchoolAccount(SchoolAccount schoolAccount) {
+        this.schoolAccount = schoolAccount;
     }
 
-    public void setGeneralInformation(String firstName, String lastName, Gender gender, String studentIdentifierNumber) throws Exception {
-        generalInformation = new GeneralInformation(firstName, lastName, gender, studentIdentifierNumber);
+    public void setGeneralInformation(GeneralInformation generalInformation) {
+        this.generalInformation = generalInformation;
     }
 
     public int calculateEnrollmentYear() {
@@ -40,31 +38,17 @@ public class User {
         return PasswordValidator.isStrongPassword(password);
     }
 
-<<<<<<< Updated upstream
-    public void updateProfile(Profile profile) throws Exception {
-        setSchoolIdentifier(profile.getProgramStudy(), profile.getFaculty(), profile.getEnrollmentYear());
-        setSchoolAccount(profile.getEmail(), profile.getPassword(), profile.getUserName());
-        setGeneralInformation(profile.getFirstName(), profile.getLastName(), profile.getGender(), profile.getStudentIdentifierNumber());
-=======
     public void updateProfile(Profile profile) {
         setSchoolIdentifier(profile.getSchoolIdentifier());
         setSchoolAccount(profile.getSchoolAccount());
         setGeneralInformation(profile.getGeneralInformation());
         printProfileStatus();
     }
->>>>>>> Stashed changes
 
     private void printProfileStatus() {
         int calculatedYear = calculateEnrollmentYear();
-<<<<<<< Updated upstream
-
-        String emailStatus = EmailValidator.getEmailStatus(profile.getEmail());
-        String passwordStatus = PasswordValidator.getPasswordStatus(profile.getPassword());
-
-=======
         String emailStatus = EmailValidator.getEmailStatus(profile.getSchoolAccount().getEmail());
         String passwordStatus = PasswordValidator.getPasswordStatus(profile.getSchoolAccount().getPassword());
->>>>>>> Stashed changes
         Printer.printStatus(emailStatus, passwordStatus);
     }
 
