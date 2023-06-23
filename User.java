@@ -40,16 +40,31 @@ public class User {
         return PasswordValidator.isStrongPassword(password);
     }
 
+<<<<<<< Updated upstream
     public void updateProfile(Profile profile) throws Exception {
         setSchoolIdentifier(profile.getProgramStudy(), profile.getFaculty(), profile.getEnrollmentYear());
         setSchoolAccount(profile.getEmail(), profile.getPassword(), profile.getUserName());
         setGeneralInformation(profile.getFirstName(), profile.getLastName(), profile.getGender(), profile.getStudentIdentifierNumber());
+=======
+    public void updateProfile(Profile profile) {
+        setSchoolIdentifier(profile.getSchoolIdentifier());
+        setSchoolAccount(profile.getSchoolAccount());
+        setGeneralInformation(profile.getGeneralInformation());
+        printProfileStatus();
+    }
+>>>>>>> Stashed changes
 
+    private void printProfileStatus() {
         int calculatedYear = calculateEnrollmentYear();
+<<<<<<< Updated upstream
 
         String emailStatus = EmailValidator.getEmailStatus(profile.getEmail());
         String passwordStatus = PasswordValidator.getPasswordStatus(profile.getPassword());
 
+=======
+        String emailStatus = EmailValidator.getEmailStatus(profile.getSchoolAccount().getEmail());
+        String passwordStatus = PasswordValidator.getPasswordStatus(profile.getSchoolAccount().getPassword());
+>>>>>>> Stashed changes
         Printer.printStatus(emailStatus, passwordStatus);
     }
 
